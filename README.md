@@ -1,5 +1,7 @@
 ## Moshi Extensions
 
+[![](https://jitpack.io/v/yizems/MoshiEx.svg)](https://jitpack.io/#yizems/MoshiEx)
+
 ### 特性
 
 - "android-json":添加对 安卓 `JsonObject` `JsonArray`的支持
