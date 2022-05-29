@@ -1,2 +1,3 @@
 rootProject.name = "MoshiEx"
 include ':app'
+include ':moshiex'
