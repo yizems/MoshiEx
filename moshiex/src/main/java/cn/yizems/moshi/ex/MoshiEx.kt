@@ -9,12 +9,15 @@ import java.lang.reflect.Type
  * to JsonAdapter
  * @param type 泛型
  */
-fun <T> Class<T>.fromJson(str: String): T? {
-    return toAdapter().fromJson(str)
+fun <T> Class<T>.fromJson(str: String, lenient: Boolean = false): T? {
+    return toAdapter(lenient).fromJson(str)
 }
 
-fun <T> Type.fromJson(str: String): T? {
-    return toAdapter<T>().fromJson(str)
+@Suppress("CheckResult")
+fun <T> Type.fromJson(str: String, lenient: Boolean = false): T? {
+    return toAdapter<T>().apply {
+        if (lenient) lenient()
+    }.fromJson(str)
 }
 
 /**
@@ -28,32 +31,45 @@ fun Type.newParameterizedType(vararg type: Type): Type {
     return this
 }
 
-fun <T> Class<T>.toAdapter(): JsonAdapter<T> {
+@Suppress("CheckResult")
+fun <T> Class<T>.toAdapter(lenient: Boolean = false): JsonAdapter<T> {
     return moshiInstances.adapter(this)
+        .apply {
+            if (lenient) {
+                this.lenient()
+            }
+        }
 }
 
+@Suppress("CheckResult")
 fun <T> Type.toAdapter(vararg type: Type): JsonAdapter<T> {
     if (type.isNotEmpty()) {
         return moshiInstances.adapter(Types.newParameterizedType(this, *type))
     }
-    return moshiInstances.adapter(this)
+    return moshiInstances.adapter<T>(this)
 }
 
 
 /**
  * 转换为字符串
  */
-inline fun <reified T> T.toJsonString(): String {
+@Suppress("CheckResult")
+inline fun <reified T> T.toJsonString(serializeNulls: Boolean = false): String {
     return T::class.java.toAdapter()
+        .apply {
+            if (serializeNulls) {
+                this.serializeNulls()
+            }
+        }
         .toJson(this)
 }
 
 /**
  * 转换为别的对象
  */
-inline fun <reified T, R> T.toOtherBean(clz: Class<R>): R? {
+inline fun <reified T, R> T.toOtherBean(clz: Class<R>, lenient: Boolean = false): R? {
     return clz
-        .toAdapter()
+        .toAdapter(lenient)
         .fromJson(
             T::class.java
                 .toAdapter()
@@ -74,26 +90,31 @@ inline fun <reified T, R> T.toOtherBean(type: Type): R? {
         )
 }
 
-fun <T> String.toClass(clz: Class<T>): T? {
-    return clz.toAdapter().fromJson(this)
+fun <T> String.toClass(clz: Class<T>, lenient: Boolean = false): T? {
+    return clz.toAdapter(lenient).fromJson(this)
 }
 
-fun <T> String.toClassList(clz: Class<T>): List<T>? {
+fun <T> String.toClassList(clz: Class<T>, lenient: Boolean = false): List<T>? {
     return List::class.java
         .newParameterizedType(clz)
-        .fromJson<List<T>>(this)
+        .fromJson<List<T>>(this, lenient)
 }
 
-fun <T, R> String.toMap(key: Class<T>, value: Class<R>): Map<T, R?>? {
+fun <T, R> String.toMap(key: Class<T>, value: Class<R>, lenient: Boolean = false): Map<T, R?>? {
     return Map::class.java
         .newParameterizedType(key, value)
-        .fromJson<Map<T, R?>>(this)
+        .fromJson<Map<T, R?>>(this, lenient)
 }
 
-fun <T> String.toMap(value: Class<T>): Map<String, T?>? {
-    return toMap(String::class.java, value)
+fun <T> String.toMap(value: Class<T>, lenient: Boolean = false): Map<String, T?>? {
+    return toMap(String::class.java, value, lenient)
 }
 
-fun <T> String.toType(type: Type): T? {
-    return type.toAdapter<T>().fromJson(this)
+@Suppress("CheckResult")
+fun <T> String.toType(type: Type, lenient: Boolean = false): T? {
+    return type.toAdapter<T>().apply {
+        if (lenient) {
+            this.lenient()
+        }
+    }.fromJson(this)
 }

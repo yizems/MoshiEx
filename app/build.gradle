@@ -41,4 +41,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation project(":moshiex")
+    implementation("com.squareup.moshi:moshi:${MOSHI_VERSION}")
+    implementation("com.squareup.moshi:moshi-kotlin:${MOSHI_VERSION}")
 }
