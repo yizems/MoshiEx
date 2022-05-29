@@ -11,4 +11,5 @@ java {
 
 dependencies {
     implementation("com.squareup.moshi:moshi:${MOSHI_VERSION}")
+    implementation project(":moshiex")
 }

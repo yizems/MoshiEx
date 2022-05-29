@@ -11,4 +11,5 @@ java {
 
 dependencies {
     implementation("com.squareup.moshi:moshi:${MOSHI_VERSION}")
+    compileOnly("com.vaadin.external.google:android-json:0.0.20131108.vaadin1")
 }

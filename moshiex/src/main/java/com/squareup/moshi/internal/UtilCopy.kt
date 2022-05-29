@@ -1,3 +1,4 @@
+@file:Suppress("NOTHING_TO_INLINE")
 package com.squareup.moshi.internal
 
 import kotlin.contracts.ExperimentalContracts

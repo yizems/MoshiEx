@@ -1,3 +1,5 @@
 rootProject.name = "MoshiEx"
 include ':app'
 include ':moshiex'
+include ':android-json'
+include ':jobj'
