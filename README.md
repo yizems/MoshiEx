@@ -9,10 +9,4 @@
     - `Base64Qualifier` 支持Base64编解码
     - `EnumJsonInt` 和 `EnumJsonString` 支持枚举类型的json转换支持
     
-### 安装
-
-```
-
-```
-
 
