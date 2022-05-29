@@ -2,6 +2,7 @@ package cn.yizems.moshiex
 
 import cn.yizems.moshi.ex.moshiInstances
 import cn.yizems.moshi.ex.setToDefault
+import cn.yizems.moshi.ex.toClass
 import cn.yizems.moshi.ex.toJsonString
 import cn.yizems.moshiex.moshi.TestVal
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -26,5 +27,17 @@ class ExampleUnitTest {
             .build()
             .setToDefault()
         println(TestVal().toJsonString())
+
+        """
+        {
+            "name": "",
+            "age": 0,
+            "sex":1
+        }
+        """.trimIndent()
+            .toClass(TestVal::class.java)
+            .let {
+                println(it.toString())
+            }
     }
 }
